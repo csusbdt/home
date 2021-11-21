@@ -1,0 +1,3 @@
+img    { display: none; }
+body   { background-color: lightgreen; margin: 0; padding: 0; }
+canvas { background-color: black; position: absolute; margin: 0; padding: 0; }
