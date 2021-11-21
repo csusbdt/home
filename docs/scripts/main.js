@@ -1,3 +1,27 @@
+window.log = function(...args) {
+	args.forEach(arg => console.log(arg));
+};
+
+window.stop_stop_sets = function(...stop_sets) {
+	stop_sets.forEach(stop_set => {
+		stop_set.forEach(o => o.stop())
+	});
+};
+
+window.start_start_sets = function(...start_sets) {
+	start_sets.forEach(start_set => {
+		start_set.forEach(o => {
+			if (typeof(o) === 'function') {
+				o();
+			} else if ('play' in o) {
+				o.play();
+			} else {
+				o.start();
+			}
+		});
+	});
+};
+
 const default_spf   = 1 / 8; // default seconds per frame
 window.dirty = true;  // to redraw canvas
 
@@ -157,13 +181,8 @@ let previous_time = new Date().getTime() / 1000;
 function animation_loop() {
 	const current_time = new Date().getTime() / 1000;
 	if (dirty) {
-//		if (typeof(g_bg) === 'undefined') {
-			//ctx.fillStyle = 'rgba(0, 0, 0)';
-			ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-			ctx.fillRect(0, 0, design_width, design_height);
-//		} else {
-//			ctx.drawImage(g_bg, 0, 0);
-//		}
+		ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
+		ctx.fillRect(0, 0, design_width, design_height);
 		drawables.forEach(o => o.draw(ctx));
 		dirty = false;
 	}
