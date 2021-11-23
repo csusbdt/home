@@ -22,11 +22,11 @@ window.start_start_sets = function(...start_sets) {
 	});
 };
 
-const default_spf   = 1 / 8; // default seconds per frame
-window.dirty = true;  // to redraw canvas
+const default_spf = 1 / 8; // default seconds per frame
+window.dirty      = true;  // to redraw canvas
 
-let design_width     = 1280;  // design width
-let design_height     = 720;   // design height
+let design_width  = 1280;  // design width
+let design_height = 720;   // design height
 
 // function set_design_size(w, h) {
 // 	design_width = w;
@@ -35,6 +35,7 @@ let design_height     = 720;   // design height
 // }
 
 const ctx = a_canvas.getContext('2d', { alpha: false });
+
 let scale = 1;
 let left  = 0;
 let top   = 0;
@@ -64,7 +65,7 @@ adjust_canvas();
 
 window.addEventListener('resize', adjust_canvas);
 
-// Convert mouse event coords to design coords.
+// Convert mouse and touch event coords to design coords.
 const design_coords = e => {
 	return {
 		x: (e.pageX - left) / scale,
@@ -74,9 +75,19 @@ const design_coords = e => {
 
 const drawables  = [];
 const updatables = [];
-let touchables   = [];
+const touchables = [];
+//let touchables   = [];
+
+let audio_context = null;
 
 const on_touch = p => {
+//	if (audio_context === null) {
+//		audio_context = new (window.AudioContext || window.webkitAudioContext)();
+//	} else if (audio_context.state === 'suspended') { 
+		// I think phones might suspend audio contexts 
+		// to reduce battery drain but I'm not sure.
+//		audio_context.resume();
+//	}
 	for (let i = 0; i < touchables.length; ++i) {
 		if (touchables[i].touch(p.x, p.y)) break;
 	}	
