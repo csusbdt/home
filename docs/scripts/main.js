@@ -78,16 +78,26 @@ const updatables = [];
 const touchables = [];
 //let touchables   = [];
 
-let audio_context = null;
+// window.addEventListener('unhandledrejection', function (e) {
+// 	if (typeof(e.reason.stack) !== 'undefined') {
+// 		console.log(e.reason, e.reason.message, e.reason.stack);
+//		g.app.fatal(e.reason, e.reason.message, e.reason.stack);
+	// } else {
+	// 	console.log(e.reason, e.reason.message);
+//		g.app.fatal(e.reason, e.reason.message);
+// 	}
+// });
+
+window.audio_context = null;
 
 const on_touch = p => {
-//	if (audio_context === null) {
-//		audio_context = new (window.AudioContext || window.webkitAudioContext)();
+	if (window.audio_context === null) {
+		window.audio_context = new (window.AudioContext || window.webkitAudioContext)();
 //	} else if (audio_context.state === 'suspended') { 
 		// I think phones might suspend audio contexts 
 		// to reduce battery drain but I'm not sure.
 //		audio_context.resume();
-//	}
+	}
 	for (let i = 0; i < touchables.length; ++i) {
 		if (touchables[i].touch(p.x, p.y)) break;
 	}	
