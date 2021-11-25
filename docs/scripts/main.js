@@ -34,7 +34,7 @@ let design_height = 720;   // design height
 // 	adjust_canvas();
 // }
 
-const ctx = a_canvas.getContext('2d', { alpha: false });
+const ctx = a_canvas.getContext('2d', { alpha: true });
 
 let scale = 1;
 let left  = 0;
@@ -93,10 +93,6 @@ window.audio_context = null;
 const on_touch = p => {
 	if (window.audio_context === null) {
 		window.audio_context = new (window.AudioContext || window.webkitAudioContext)();
-//	} else if (audio_context.state === 'suspended') { 
-		// I think phones might suspend audio contexts 
-		// to reduce battery drain but I'm not sure.
-//		audio_context.resume();
 	}
 	for (let i = 0; i < touchables.length; ++i) {
 		if (touchables[i].touch(p.x, p.y)) break;
@@ -130,10 +126,10 @@ const touchmove = e => {
 	e.preventDefault();
 }
 
-a_canvas.addEventListener('mousemove', mousemove, true);
-a_canvas.addEventListener('mousedown', mousedown, true); 
-a_canvas.addEventListener('touchend' , touchend , true); 
-a_canvas.addEventListener('touchmove', touchmove, { passive: false }); 
+document.addEventListener('mousemove', mousemove, true);
+document.addEventListener('mousedown', mousedown, true); 
+document.addEventListener('touchend' , touchend , true); 
+document.addEventListener('touchmove', touchmove, { passive: false }); 
 
 window.add_touchable = function(o) {
 	if (touchables.includes(o)) return;
@@ -202,8 +198,10 @@ let previous_time = new Date().getTime() / 1000;
 function animation_loop() {
 	const current_time = new Date().getTime() / 1000;
 	if (dirty) {
-		ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
-		ctx.fillRect(0, 0, design_width, design_height);
+		//ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
+		//ctx.fillStyle = "#FF0000";
+		//ctx.fillRect(0, 0, design_width, design_height);
+		ctx.clearRect(0, 0, design_width, design_height);
 		drawables.forEach(o => o.draw(ctx));
 		dirty = false;
 	}

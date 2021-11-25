@@ -21,13 +21,27 @@ c_once.prototype.set_dy = function(dy) {
 
 c_once.prototype.starts = function(...os) {
 	os.forEach(o => {
-		this.start_set.push(o);
+		if (Array.isArray(o)) {
+			o.forEach(oo => {
+				this.starts(oo);
+			});
+		} else {
+			this.start_set.push(o);
+		}
 	});
 	return this;
 };
 
 c_once.prototype.stops = function(...os) {
-	os.forEach(o => this.stop_set.push(o));
+	os.forEach(o => {
+		if (Array.isArray(o)) {
+			o.forEach(oo => {
+				this.stops(oo);
+			});
+		} else {
+			this.stop_set.push(o);
+		}
+	});
 	return this;
 };
 
