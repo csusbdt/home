@@ -8,8 +8,7 @@ import touch  from "./scripts/touch.js" ;
 import music  from "./scripts/music.js" ;
 import sfx    from "./scripts/sfx.js"   ;
 
-//const say_it = music(m_say_it);
-const say_it = music();
+const say_it = music(m_say_it);
 
 const thud = sfx("sfx/thud_0.966.mp3");
 const tick = sfx("sfx/tick_0.157.mp3");
@@ -57,7 +56,6 @@ pause_bg_touch.starts(thud, pause_view);
 say_it.stops(pause_view).starts(play_view);
 
 start_start_sets(play_view);
-//play_bg_touch.start();
 
 /*
 

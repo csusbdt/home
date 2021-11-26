@@ -1,3 +1,7 @@
+/*****************************************************/
+/*                       globals                     */
+/*****************************************************/
+
 window.log = function(...args) {
 	args.forEach(arg => console.log(arg));
 };
@@ -13,8 +17,6 @@ window.start_start_sets = function(...start_sets) {
 		start_set.forEach(o => {
 			if (typeof(o) === 'function') {
 				o();
-//			} else if ('play' in o) {
-//				o.play();
 			} else {
 				o.start();
 			}
@@ -48,8 +50,15 @@ window.stops = function(...os) {
 	return this;
 };
 
+window.audio_context = null;
+window.dirty         = true;  // to redraw canvas
+window.bg_image      = null;
+
+/*****************************************************/
+/*                     locals                        */
+/*****************************************************/
+
 const default_spf = 1 / 8; // default seconds per frame
-window.dirty      = true;  // to redraw canvas
 
 let design_width  = 1280;  // design width
 let design_height = 720;   // design height
@@ -60,7 +69,8 @@ let design_height = 720;   // design height
 // 	adjust_canvas();
 // }
 
-const ctx = a_canvas.getContext('2d', { alpha: true });
+// alpha === false speeds up drawing of transparent images
+const ctx = a_canvas.getContext('2d', { alpha: false });
 
 let scale = 1;
 let left  = 0;
@@ -102,7 +112,6 @@ const design_coords = e => {
 const drawables  = [];
 const updatables = [];
 const touchables = [];
-//let touchables   = [];
 
 // window.addEventListener('unhandledrejection', function (e) {
 // 	if (typeof(e.reason.stack) !== 'undefined') {
@@ -114,23 +123,13 @@ const touchables = [];
 // 	}
 // });
 
-window.audio_context = null;
-
 const on_touch = p => {
 	if (audio_context === null) {
 		audio_context = new (window.AudioContext || window.webkitAudioContext)();
-		// if (audio_context.state === 'suspended') {
-		// 	setTimeout(() => {
-		// 		audio_context.resume();
-		// 		on_touch(p);
-		// 	}, 10);
-		// 	return;
-		// }
-		//return;
 	}
-	// if (audio_context.state === 'suspended') {
-	// 	audio_context.resume();
-	// }
+	if (audio_context.state === 'suspended') { // not sure this is needed
+		audio_context.resume();
+	}
 	for (let i = 0; i < touchables.length; ++i) {
 		if (touchables[i].touch(p.x, p.y)) break;
 	}	
@@ -172,10 +171,6 @@ window.add_touchable = function(o) {
 	if (touchables.includes(o)) return;
 	touchables.push(o);
 };
-
-// const unshift_touchable = function(o) {
-// 	touchables.unshift(o);
-// };
 
 window.add_drawable = function(o) {
 	if (!('z_index' in o)) throw new Error(o);
@@ -235,10 +230,12 @@ let previous_time = new Date().getTime() / 1000;
 function animation_loop() {
 	const current_time = new Date().getTime() / 1000;
 	if (dirty) {
-		//ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
-		//ctx.fillStyle = "#FF0000";
-		//ctx.fillRect(0, 0, design_width, design_height);
-		ctx.clearRect(0, 0, design_width, design_height);
+		if (bg_image === null) {
+			ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
+			ctx.fillRect(0, 0, design_width, design_height);
+		} else {
+			ctx.drawImage(bg_image, 0, 0);
+		}
 		drawables.forEach(o => o.draw(ctx));
 		dirty = false;
 	}
