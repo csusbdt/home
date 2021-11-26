@@ -3,19 +3,19 @@ import frames from "./scripts/frame.js" ;
 import loop   from "./scripts/loop.js"  ;
 import once   from "./scripts/once.js"  ;
 import circle from './scripts/circle.js';
-import rect   from './scripts/rect.js'  ;
+//import rect   from './scripts/rect.js'  ;
 import touch  from "./scripts/touch.js" ;
 import music  from "./scripts/music.js" ;
 import sfx    from "./scripts/sfx.js"   ;
 
-const say_it = music(m_say_it);
+//const say_it = music(m_say_it);
+const say_it = music();
 
 const thud = sfx("sfx/thud_0.966.mp3");
 const tick = sfx("sfx/tick_0.157.mp3");
 const blop = sfx("sfx/blop_0.264.mp3");
 
 //document.body.style.backgroundColor = "rgb(135, 181, 174)";
-//document.body.style.backgroundColor = "rgb(255, 0, 0)";
 
 const play_loop_frames  = frames([i_play_0 ]);
 const pause_loop_frames = frames([i_pause_0]);
@@ -23,11 +23,17 @@ const pause_loop_frames = frames([i_pause_0]);
 const play_closing_frames  = frames([i_play_1 , i_play_2 ], .182);
 const pause_closing_frames = frames([i_pause_1, i_pause_2], .182);
 
+const play_opening_frames  = play_closing_frames.reverse();
+const pause_opening_frames = pause_closing_frames.reverse();
+
 const play_loop   = loop(play_loop_frames  , 10);
 const pause_loop  = loop(pause_loop_frames , 10);
 
 const play_closing  = once(play_closing_frames  , 10);
 const pause_closing = once(pause_closing_frames , 10);
+
+const play_opening  = once(play_opening_frames  , 10);
+const pause_opening = once(pause_opening_frames , 10);
 
 const play_touch      = touch(circle(608, 327, 110));
 const play_bg_touch   = touch();
@@ -48,7 +54,10 @@ pause_closing.stops(say_it, pause_loop).starts(play_view);
 
 pause_bg_touch.starts(thud, pause_view);
 
+say_it.stops(pause_view).starts(play_view);
+
 start_start_sets(play_view);
+//play_bg_touch.start();
 
 /*
 

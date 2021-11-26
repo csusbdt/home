@@ -12,7 +12,7 @@ function c_sfx(file, volume) {
 //	this.gain_node = null;
 	this.fetching = false;
 	this.decoding = false;
-	this.fetch();
+	//this.fetch();
 }
 
 // fetch allowed before user interaction 

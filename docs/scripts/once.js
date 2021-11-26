@@ -19,6 +19,10 @@ c_once.prototype.set_dy = function(dy) {
 	return this;
 }
 
+c_once.prototype.starts = window.starts;
+c_once.prototype.stops  = window.stops;
+
+/*
 c_once.prototype.starts = function(...os) {
 	os.forEach(o => {
 		if (Array.isArray(o)) {
@@ -44,6 +48,7 @@ c_once.prototype.stops = function(...os) {
 	});
 	return this;
 };
+*/
 
 c_once.prototype.started = function() {
 	return drawables.includes(this);

@@ -6,39 +6,17 @@ function c_touch(shapes, dx, dy) {
 	this.stop_set  = [];
 }
 
-c_touch.prototype.starts = function(...os) {
-	os.forEach(o => {
-		if (Array.isArray(o)) {
-			o.forEach(oo => {
-				this.starts(oo);
-			});
-		} else {
-			this.start_set.push(o);
-		}
-	});
-	return this;
-};
 
-c_touch.prototype.stops = function(...os) {
-	os.forEach(o => {
-		if (Array.isArray(o)) {
-			o.forEach(oo => {
-				this.stops(oo);
-			});
-		} else {
-			this.stop_set.push(o);
-		}
-	});
-	return this;
-};
+c_touch.prototype.starts = window.starts;
+c_touch.prototype.stops  = window.stops;
 
 c_touch.prototype.start = function() {
 	add_touchable(this);
 };
 
-// c_touch.prototype.stop = function() {
-// 	remove_touchable(this);
-// };
+c_touch.prototype.stop = function() {
+	remove_touchable(this);
+};
 
 c_touch.prototype.touch = function(x, y) {
 	if (this.shapes === null) {

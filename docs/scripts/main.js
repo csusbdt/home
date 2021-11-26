@@ -13,13 +13,39 @@ window.start_start_sets = function(...start_sets) {
 		start_set.forEach(o => {
 			if (typeof(o) === 'function') {
 				o();
-			} else if ('play' in o) {
-				o.play();
+//			} else if ('play' in o) {
+//				o.play();
 			} else {
 				o.start();
 			}
 		});
 	});
+};
+
+window.starts = function(...os) {
+	os.forEach(o => {
+		if (Array.isArray(o)) {
+			o.forEach(oo => {
+				this.starts(oo);
+			});
+		} else {
+			this.start_set.push(o);
+		}
+	});
+	return this;
+};
+
+window.stops = function(...os) {
+	os.forEach(o => {
+		if (Array.isArray(o)) {
+			o.forEach(oo => {
+				this.stops(oo);
+			});
+		} else {
+			this.stop_set.push(o);
+		}
+	});
+	return this;
 };
 
 const default_spf = 1 / 8; // default seconds per frame
@@ -91,9 +117,20 @@ const touchables = [];
 window.audio_context = null;
 
 const on_touch = p => {
-	if (window.audio_context === null) {
-		window.audio_context = new (window.AudioContext || window.webkitAudioContext)();
+	if (audio_context === null) {
+		audio_context = new (window.AudioContext || window.webkitAudioContext)();
+		// if (audio_context.state === 'suspended') {
+		// 	setTimeout(() => {
+		// 		audio_context.resume();
+		// 		on_touch(p);
+		// 	}, 10);
+		// 	return;
+		// }
+		//return;
 	}
+	// if (audio_context.state === 'suspended') {
+	// 	audio_context.resume();
+	// }
 	for (let i = 0; i < touchables.length; ++i) {
 		if (touchables[i].touch(p.x, p.y)) break;
 	}	
