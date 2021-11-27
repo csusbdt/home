@@ -16,44 +16,45 @@ const blop = sfx("sfx/blop_0.264.mp3");
 
 //document.body.style.backgroundColor = "rgb(135, 181, 174)";
 
-const play_loop_frames  = frames([i_play_0 ]);
-const pause_loop_frames = frames([i_pause_0]);
+const play_loop_frames  = frames([i_play_0 ], 1, -150, 0);
+const pause_loop_frames = frames([i_pause_0], 1,  150, 0);
 
-const play_closing_frames  = frames([i_play_1 , i_play_2 ], .182);
-const pause_closing_frames = frames([i_pause_1, i_pause_2], .182);
+const play_closing_frames  = frames([i_play_1 , i_play_2 ], .08, -150, 0);
+const pause_closing_frames = frames([i_pause_1, i_pause_2], .08,  150, 0);
 
-const play_opening_frames  = play_closing_frames.reverse();
-const pause_opening_frames = pause_closing_frames.reverse();
+const play_opening_frames  = play_closing_frames.slice().reverse();
+const pause_opening_frames = pause_closing_frames.slice().reverse();
 
-const play_loop   = loop(play_loop_frames  , 10);
-const pause_loop  = loop(pause_loop_frames , 10);
+const play_loop   = loop(play_loop_frames , 10);
+const pause_loop  = loop(pause_loop_frames, 10);
 
-const play_closing  = once(play_closing_frames  , 10);
-const pause_closing = once(pause_closing_frames , 10);
+const play_closing  = once(play_closing_frames , 10);
+const pause_closing = once(pause_closing_frames, 10);
 
-const play_opening  = once(play_opening_frames  , 10);
-const pause_opening = once(pause_opening_frames , 10);
+const play_opening  = once(play_opening_frames , 10);
+const pause_opening = once(pause_opening_frames, 10);
 
-const play_touch      = touch(circle(608, 327, 110));
+const play_touch      = touch(circle(608, 327, 110), -150, 0);
 const play_bg_touch   = touch();
 
-const pause_touch     = touch(circle(620, 316, 126));
+const pause_touch     = touch(circle(620, 316, 126), 150, 0);
 const pause_bg_touch  = touch();
 
 const play_view  = [play_loop , play_touch , play_bg_touch ];
 const pause_view = [pause_loop, pause_touch, pause_bg_touch];
 
 play_touch.stops(play_loop).starts(blop, play_closing);
-play_closing.starts(say_it, pause_view);
+play_closing.starts(say_it, pause_opening);
+pause_opening.starts(pause_view);
+
+pause_touch.stops(say_it, pause_loop).starts(blop, pause_closing);
+pause_closing.starts(play_opening);
+play_opening.starts(play_view);
 
 play_bg_touch.starts(thud, play_view);
-
-pause_touch.stops(pause_loop).starts(blop, pause_closing);
-pause_closing.stops(say_it, pause_loop).starts(play_view);
-
 pause_bg_touch.starts(thud, pause_view);
 
-say_it.stops(pause_view).starts(play_view);
+say_it.stops(pause_view).starts(pause_closing);
 
 start_start_sets(play_view);
 

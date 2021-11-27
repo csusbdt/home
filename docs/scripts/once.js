@@ -22,34 +22,6 @@ c_once.prototype.set_dy = function(dy) {
 c_once.prototype.starts = window.starts;
 c_once.prototype.stops  = window.stops;
 
-/*
-c_once.prototype.starts = function(...os) {
-	os.forEach(o => {
-		if (Array.isArray(o)) {
-			o.forEach(oo => {
-				this.starts(oo);
-			});
-		} else {
-			this.start_set.push(o);
-		}
-	});
-	return this;
-};
-
-c_once.prototype.stops = function(...os) {
-	os.forEach(o => {
-		if (Array.isArray(o)) {
-			o.forEach(oo => {
-				this.stops(oo);
-			});
-		} else {
-			this.stop_set.push(o);
-		}
-	});
-	return this;
-};
-*/
-
 c_once.prototype.started = function() {
 	return drawables.includes(this);
 };
@@ -72,7 +44,6 @@ c_once.prototype.update = function(dt) {
 		++this.frame_index;
 		dirty = true;
 		if (this.frame_index === this.frames.length) {
-			this.frame_index = 0;
 			remove_drawable(this);
 			remove_updatable(this);
 			stop_stop_sets(this.stop_set);
